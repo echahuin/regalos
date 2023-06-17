@@ -1,60 +1,64 @@
-const slider = document.querySelector('.slider');
-const images = slider.querySelectorAll('img');
-const prevButton = document.querySelector('.prev-btn');
-const nextButton = document.querySelector('.next-btn');
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-let currentImage = 0;
-let timer;
+if (isMobile) {
+  const slider = document.querySelector('.slider');
+  const images = slider.querySelectorAll('img');
+  const prevButton = document.querySelector('.prev-btn');
+  const nextButton = document.querySelector('.next-btn');
 
-function showImage() {
+  let currentImage = 0;
+  let timer;
+
+  function showImage() {
     images.forEach((image, index) => {
-        if (index === currentImage) {
-            image.style.display = 'block';
-        } else {
-            image.style.display = 'none';
-        }
+      if (index === currentImage) {
+        image.style.display = 'block';
+      } else {
+        image.style.display = 'none';
+      }
     });
-}
+  }
 
-function nextImage() {
+  function nextImage() {
     currentImage++;
     if (currentImage >= images.length) {
-        currentImage = 0;
+      currentImage = 0;
     }
     showImage();
-}
+  }
 
-function prevImage() {
+  function prevImage() {
     currentImage--;
     if (currentImage < 0) {
-        currentImage = images.length - 1;
+      currentImage = images.length - 1;
     }
     showImage();
-}
+  }
 
-function startTimer() {
+  function startTimer() {
     timer = setInterval(nextImage, 3000);
-}
+  }
 
-function stopTimer() {
+  function stopTimer() {
     clearInterval(timer);
-}
+  }
 
-nextButton.addEventListener('click', () => {
+  nextButton.addEventListener('click', () => {
     nextImage();
     stopTimer();
-});
+  });
 
-prevButton.addEventListener('click', () => {
+  prevButton.addEventListener('click', () => {
     prevImage();
     stopTimer();
-});
+  });
 
-slider.addEventListener('mouseover', stopTimer);
-slider.addEventListener('mouseout', startTimer);
+  slider.addEventListener('touchstart', stopTimer);
+  slider.addEventListener('touchend', startTimer);
 
-showImage();
-startTimer();
+  showImage();
+  startTimer();
+}
 
 
 // dos
