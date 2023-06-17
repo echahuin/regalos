@@ -1,64 +1,60 @@
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+const slider = document.querySelector('.slider');
+const images = slider.querySelectorAll('img');
+const prevButton = document.querySelector('.prev-btn');
+const nextButton = document.querySelector('.next-btn');
 
-if (isMobile) {
-  const slider = document.querySelector('.slider');
-  const images = slider.querySelectorAll('img');
-  const prevButton = document.querySelector('.prev-btn');
-  const nextButton = document.querySelector('.next-btn');
+let currentImage = 0;
+let timer;
 
-  let currentImage = 0;
-  let timer;
-
-  function showImage() {
+function showImage() {
     images.forEach((image, index) => {
-      if (index === currentImage) {
-        image.style.display = 'block';
-      } else {
-        image.style.display = 'none';
-      }
+        if (index === currentImage) {
+            image.style.display = 'block';
+        } else {
+            image.style.display = 'none';
+        }
     });
-  }
+}
 
-  function nextImage() {
+function nextImage() {
     currentImage++;
     if (currentImage >= images.length) {
-      currentImage = 0;
+        currentImage = 0;
     }
     showImage();
-  }
+}
 
-  function prevImage() {
+function prevImage() {
     currentImage--;
     if (currentImage < 0) {
-      currentImage = images.length - 1;
+        currentImage = images.length - 1;
     }
     showImage();
-  }
+}
 
-  function startTimer() {
+function startTimer() {
     timer = setInterval(nextImage, 3000);
-  }
+}
 
-  function stopTimer() {
+function stopTimer() {
     clearInterval(timer);
-  }
+}
 
-  nextButton.addEventListener('click', () => {
+nextButton.addEventListener('click', () => {
     nextImage();
     stopTimer();
-  });
+});
 
-  prevButton.addEventListener('click', () => {
+prevButton.addEventListener('click', () => {
     prevImage();
     stopTimer();
-  });
+});
 
-  slider.addEventListener('touchstart', stopTimer);
-  slider.addEventListener('touchend', startTimer);
+slider.addEventListener('mouseover', stopTimer);
+slider.addEventListener('mouseout', startTimer);
 
-  showImage();
-  startTimer();
-}
+showImage();
+startTimer();
 
 
 // dos
@@ -120,3 +116,54 @@ slider_2.addEventListener('mouseout', startTimer_2);
 
 showImage_2();
 startTimer_2();
+
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+if (isMobile) {
+
+const slider = document.querySelector('.slider');
+const slider_2 = document.querySelector('.slider_2');
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+slider.addEventListener('touchstart', (event) => {
+    touchStartX = event.touches[0].clientX;
+});
+
+slider.addEventListener('touchmove', (event) => {
+    touchEndX = event.touches[0].clientX;
+});
+
+slider.addEventListener('touchend', () => {
+    handleGesture();
+});
+
+slider_2.addEventListener('touchstart', (event) => {
+    touchStartX = event.touches[0].clientX;
+});
+
+slider_2.addEventListener('touchmove', (event) => {
+    touchEndX = event.touches[0].clientX;
+});
+
+slider_2.addEventListener('touchend', () => {
+    handleGesture();
+});
+
+function handleGesture() {
+    if (touchEndX < touchStartX) {
+        // Deslizar hacia la izquierda
+        nextImage();
+        stopTimer();
+    }
+
+    if (touchEndX > touchStartX) {
+        // Deslizar hacia la derecha
+        prevImage();
+        stopTimer();
+    }
+
+    touchStartX = 0;
+    touchEndX = 0;
+}}
